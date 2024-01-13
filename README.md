@@ -7,7 +7,7 @@ Mofi uses [FastAPI](https://fastapi.tiangolo.com/) to handle the webhooks.
 ## Installation
 
 ```bash
-pip install mofi
+$ pip install mofi
 ```
 
 ## Usage
@@ -15,30 +15,30 @@ pip install mofi
 ```python
 from mofi import Mofi, Donation, GlobalType, Subscription, ShopOrder
 
-mofi = Mofi(token="token")
+app = Mofi(token="token")
 
 
-@mofi.callback("donation")
+@app.callback("donation")
 async def donation(data: Donation):
     print("Donation event.")
 
 
-@mofi.callback("subscription")
+@app.callback("subscription")
 async def subscription(data: Subscription):
     print("Subscription event")
 
 
-@mofi.callback("shop_order")
+@app.callback("shop_order")
 async def shop_order(data: ShopOrder):
     print("Shop Order event")
 
 
-@mofi.callback("global")
+@app.callback("global")
 async def global_callback(data: GlobalType):
     print("Global event")  # matches all event types
 
 
-mofi.run(host="127.0.0.1", port=8000)  # use 0.0.0.0 and 80 on delpoyment
+app.run(host="127.0.0.1", port=8000)  # use 0.0.0.0 and 80 on deployment
 ```
 To get your token, go [here](https://ko-fi.com/manage/webhooks) and click "Advanced"
 
