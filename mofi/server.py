@@ -24,6 +24,12 @@ class Mofi:
         self._callbacks: dict[str, list[Callable[..., Any]]] = defaultdict(list)
 
     def run(self, *, host: str = "127.0.0.1", port: int = 8000):
+        """Run the server."""
+
+        self._setup()
+        uvicorn.run(self._app, host=host, port=port)
+
+    def _setup(self):
         @self._app.post("/")
         async def _(data: Request):
             valid = True
@@ -54,8 +60,6 @@ class Mofi:
                     await cb(schema(**rjson))
                 else:
                     cb(schema(**rjson))
-
-        uvicorn.run(self._app, host=host, port=port)
 
     def callback(
         self,
