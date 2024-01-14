@@ -1,6 +1,20 @@
+from datetime import datetime
 from typing import Literal, Union
 
 from pydantic import BaseModel
+
+
+class _Base(BaseModel):
+    verification_token: str
+    message_id: str
+    timestamp: datetime
+    is_public: bool
+    from_name: str
+    amount: str
+    url: str
+    email: str
+    currency: str
+    kofi_transaction_id: str
 
 
 class ShopItem(BaseModel):
@@ -41,13 +55,13 @@ class Shipping(BaseModel):
     telephone: str
 
 
-class GlobalType(BaseModel):
+class GlobalType(_Base):
     """Represents a global type.
 
     Attributes:
         verification_token (str): The verification token.
         message_id (str): The message ID.
-        timestamp (str): The timestamp.
+        timestamp (datetime): The timestamp.
         type (str): The type.
         is_public (bool): Whether the donation is public.
         from_name (str): The name of the donor.
@@ -65,32 +79,22 @@ class GlobalType(BaseModel):
         shipping (Shipping): The shipping information.
     """
 
-    verification_token: str
-    message_id: str
-    timestamp: str
     type: str
-    is_public: bool
-    from_name: str
     message: Union[str, None] = None
-    amount: str
-    url: str
-    email: str
-    currency: str
     is_subscription_payment: bool
     is_first_subscription_payment: bool
-    kofi_transaction_id: str
     shop_items: Union[list[ShopItem], None] = None
     tier_name: Union[str, None] = None
     shipping: Union[Shipping, None] = None
 
 
-class Donation(BaseModel):
+class Donation(_Base):
     """Represents a donation.
 
     Attributes:
         verification_token (str): The verification token.
         message_id (str): The message ID.
-        timestamp (str): The timestamp.
+        timestamp (datetime): The timestamp.
         type (str): The type.
         is_public (bool): Whether the donation is public.
         from_name (str): The name of the donor.
@@ -105,29 +109,17 @@ class Donation(BaseModel):
         kofi_transaction_id (str): The transaction ID of the donation.
     """
 
-    verification_token: str
-    message_id: str
-    timestamp: str
     type: Literal["Donation"]
-    is_public: bool
-    from_name: str
     message: str
-    amount: str
-    url: str
-    email: str
-    currency: str
-    is_subscription_payment: bool
-    is_first_subscription_payment: bool
-    kofi_transaction_id: str
 
 
-class Subscription(BaseModel):
+class Subscription(_Base):
     """Represents a subscription.
 
     Attributes:
         verification_token (str): The verification token.
         message_id (str): The message ID.
-        timestamp (str): The timestamp.
+        timestamp (datetime): The timestamp.
         type (str): The type.
         is_public (bool): Whether the donation is public.
         from_name (str): The name of the donor.
@@ -143,30 +135,20 @@ class Subscription(BaseModel):
         tier_name (str): The name of the tier.
     """
 
-    verification_token: str
-    message_id: str
-    timestamp: str
     type: Literal["Subscription"]
-    is_public: bool
-    from_name: str
     message: Union[str, None] = None
-    amount: str
-    url: str
-    email: str
-    currency: str
     is_subscription_payment: bool
     is_first_subscription_payment: bool
-    kofi_transaction_id: str
     tier_name: Union[str, None] = None
 
 
-class ShopOrder(BaseModel):
+class ShopOrder(_Base):
     """Represents a shop order.
 
     Attributes:
         verification_token (str): The verification token.
         message_id (str): The message ID.
-        timestamp (str): The timestamp.
+        timestamp (datetime): The timestamp.
         type (str): The type.
         is_public (bool): Whether the donation is public.
         from_name (str): The name of the donor.
@@ -182,18 +164,6 @@ class ShopOrder(BaseModel):
         shipping (Shipping): The shipping information.
     """
 
-    verification_token: str
-    message_id: str
-    timestamp: str
     type: Literal["Shop Order"]
-    is_public: bool
-    from_name: str
-    amount: str
-    url: str
-    email: str
-    currency: str
-    is_subscription_payment: bool
-    is_first_subscription_payment: bool
-    kofi_transaction_id: str
     shop_items: list[ShopItem]
     shipping: Shipping
