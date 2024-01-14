@@ -103,9 +103,6 @@ class Donation(_Base):
         url (str): The URL of the donation.
         email (str): The email of the donor.
         currency (str): The currency of the donation.
-        is_subscription_payment (bool): Whether the donation is a subscription payment.
-        is_first_subscription_payment (bool): Whether the donation is
-            the first subscription payment.
         kofi_transaction_id (str): The transaction ID of the donation.
     """
 
@@ -156,9 +153,6 @@ class ShopOrder(_Base):
         url (str): The URL of the donation.
         email (str): The email of the donor.
         currency (str): The currency of the donation.
-        is_subscription_payment (bool): Whether the donation is a subscription payment.
-        is_first_subscription_payment (bool): Whether the donation is
-            the first subscription payment.
         kofi_transaction_id (str): The transaction ID of the donation.
         shop_items (list[ShopItem]): The shop items of the donation.
         shipping (Shipping): The shipping information.
