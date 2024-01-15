@@ -4,7 +4,7 @@ from collections import defaultdict
 from typing import Any, Callable, Literal
 
 import uvicorn
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import APIRouter, FastAPI, Request, HTTPException
 
 from .schemas import GlobalType, Donation, ShopOrder, Subscription
 
@@ -18,9 +18,13 @@ types = {
 
 
 class Mofi:
+    """The class to handle Ko-fi webhooks."""
+
+    _app: FastAPI | APIRouter
+
     def __init__(self, token: str):
         self.token = token
-        self._app = FastAPI()
+        self._app = FastAPI(title="Mofi")
         self._callbacks: dict[str, list[Callable[..., Any]]] = defaultdict(list)
 
     def run(self, *, host: str = "127.0.0.1", port: int = 8000):
@@ -28,6 +32,13 @@ class Mofi:
 
         self._setup()
         uvicorn.run(self._app, host=host, port=port)
+
+    def as_router(self) -> APIRouter:
+        """Converts the app to a FastAPI Router."""
+
+        self._app = APIRouter(tags=["Mofi"])
+        self._setup()
+        return self._app
 
     def _setup(self):
         @self._app.post("/")
