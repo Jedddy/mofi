@@ -82,7 +82,12 @@ class Mofi:
             type (str): The type to listen listen to
         """
 
+        lowered = type.lower()
+        assert (
+            lowered in types
+        ), f"Invalid type {type}, must be one of {', '.join(types.keys())}"
+
         def wrapper(func: Callable[..., Any]):
-            self._callbacks[type.lower()].append(func)
+            self._callbacks[lowered].append(func)
 
         return wrapper
