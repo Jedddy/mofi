@@ -2,13 +2,12 @@ import json
 
 import pytest
 import pytest_asyncio
-
 from httpx import AsyncClient
 
 from mofi import Mofi, GlobalType, Donation, Subscription, ShopOrder
 
 
-app = Mofi("9389fa0c-cd97-4770-af40-4a53d85a842b")
+app = Mofi("token")
 
 
 @app.callback("global")
@@ -43,14 +42,14 @@ app._setup()
 pytestmark = pytest.mark.asyncio(scope="module")
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="module")
 async def client():
     async with AsyncClient(app=app._app) as client:
         yield client
 
 
 donation = {
-    "verification_token": "9389fa0c-cd97-4770-af40-4a53d85a842b",
+    "verification_token": "token",
     "message_id": "2b53017c-860e-47e1-86b4-599a28d4d098",
     "timestamp": "2024-01-14T03:56:47Z",
     "type": "Donation",
@@ -70,7 +69,7 @@ donation = {
 }
 
 first_monthly = {
-    "verification_token": "9389fa0c-cd97-4770-af40-4a53d85a842b",
+    "verification_token": "token",
     "message_id": "0361339f-4897-484f-ad30-d444651481db",
     "timestamp": "2024-01-14T03:56:47Z",
     "type": "Subscription",
@@ -90,7 +89,7 @@ first_monthly = {
 }
 
 subsequent_sub = {
-    "verification_token": "9389fa0c-cd97-4770-af40-4a53d85a842b",
+    "verification_token": "token",
     "message_id": "f6441f3d-a76f-498f-ba59-6e258c8186ad",
     "timestamp": "2024-01-14T03:56:47Z",
     "type": "Subscription",
@@ -110,7 +109,7 @@ subsequent_sub = {
 }
 
 shop_order = {
-    "verification_token": "9389fa0c-cd97-4770-af40-4a53d85a842b",
+    "verification_token": "token",
     "message_id": "633a0988-55c9-48c7-b277-b810f61afd66",
     "timestamp": "2024-01-14T03:56:47Z",
     "type": "Shop Order",
