@@ -40,6 +40,28 @@ async def global_callback(data: GlobalType):
 
 app.run(host="127.0.0.1", port=8000)  # use 0.0.0.0 and 80 on deployment
 ```
+
+```python
+from fastapi import FastAPI
+from mofi import Mofi, GlobalType
+
+app = FastAPI()
+mofi_wh = Mofi(token="token")
+
+
+@mofi_wh.callback("global")
+async def global_type(data: GlobalType):
+    print(data.from_name)
+
+
+app.include_router(mofi_wh.as_router())  # add mofi after defining callbacks
+
+
+@app.get("/")
+async def index():
+    return {"message": "Hello World"}
+```
+
 To get your token, go [here](https://ko-fi.com/manage/webhooks) and click "Advanced"
 
 To test, use ngrok or similar to expose your local server to the internet.
