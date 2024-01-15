@@ -40,7 +40,7 @@ async def global_callback(data: GlobalType):
 
 app.run(host="127.0.0.1", port=8000)  # use 0.0.0.0 and 80 on deployment
 ```
-
+With fastapi:
 ```python
 from fastapi import FastAPI
 from mofi import Mofi, GlobalType
