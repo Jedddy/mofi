@@ -4,6 +4,10 @@ A simple webhook wrapper for [Ko-fi](https://ko-fi.com)
 
 Mofi uses [FastAPI](https://fastapi.tiangolo.com/) to handle the webhooks.
 
+## Portfolio Description
+
+Mofi is a lightweight Python package that helps developers receive and process Ko-fi webhook events in FastAPI applications. It provides typed event models for donations, subscriptions, and shop orders, plus a simple callback-based API for handling each event cleanly.
+
 ## Installation
 
 ```bash
