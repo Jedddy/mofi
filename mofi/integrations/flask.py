@@ -4,7 +4,12 @@ from __future__ import annotations
 
 from typing import Any, Callable, TypeVar
 
-from flask import Blueprint, Response, abort, current_app, request
+from ._dependencies import missing_dependency
+
+try:
+    from flask import Blueprint, Response, abort, current_app, request
+except ModuleNotFoundError as error:
+    raise missing_dependency("Flask", "flask") from error
 
 from mofi.exceptions import InvalidEvent, InvalidPayload, VerificationFailed
 from mofi.schemas import PaymentEvent

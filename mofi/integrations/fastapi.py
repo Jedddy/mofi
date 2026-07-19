@@ -5,7 +5,12 @@ from __future__ import annotations
 import inspect
 from typing import Any, Callable, TypeVar
 
-from fastapi import APIRouter, HTTPException, Request, Response, status
+from ._dependencies import missing_dependency
+
+try:
+    from fastapi import APIRouter, HTTPException, Request, Response, status
+except ModuleNotFoundError as error:
+    raise missing_dependency("FastAPI", "fastapi") from error
 
 from mofi.exceptions import InvalidEvent, InvalidPayload, VerificationFailed
 from mofi.schemas import PaymentEvent

@@ -4,16 +4,21 @@ from __future__ import annotations
 
 from typing import Any, Callable, TypeVar
 
-from asgiref.sync import async_to_sync, iscoroutinefunction
-from django.conf import settings
-from django.http import (
-    HttpRequest,
-    HttpResponse,
-    HttpResponseBadRequest,
-    HttpResponseForbidden,
-    HttpResponseNotAllowed,
-)
-from django.views.decorators.csrf import csrf_exempt
+from ._dependencies import missing_dependency
+
+try:
+    from asgiref.sync import async_to_sync, iscoroutinefunction
+    from django.conf import settings
+    from django.http import (
+        HttpRequest,
+        HttpResponse,
+        HttpResponseBadRequest,
+        HttpResponseForbidden,
+        HttpResponseNotAllowed,
+    )
+    from django.views.decorators.csrf import csrf_exempt
+except ModuleNotFoundError as error:
+    raise missing_dependency("Django", "django") from error
 
 from mofi.exceptions import InvalidEvent, InvalidPayload, VerificationFailed
 from mofi.schemas import PaymentEvent
