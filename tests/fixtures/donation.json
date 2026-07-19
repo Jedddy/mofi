@@ -1,0 +1,19 @@
+{
+  "verification_token": "fixture-token",
+  "message_id": "00000000-0000-4000-8000-000000000001",
+  "timestamp": "2024-01-14T03:56:47Z",
+  "type": "Donation",
+  "is_public": true,
+  "from_name": "Sample Supporter",
+  "message": "Good luck with the integration!",
+  "amount": "3.00",
+  "url": "https://ko-fi.example.invalid/transaction/0001",
+  "email": "supporter@example.invalid",
+  "currency": "USD",
+  "is_subscription_payment": false,
+  "is_first_subscription_payment": false,
+  "kofi_transaction_id": "00000000-0000-4000-8000-100000000001",
+  "shop_items": null,
+  "tier_name": null,
+  "shipping": null
+}

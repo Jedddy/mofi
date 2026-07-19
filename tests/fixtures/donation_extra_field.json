@@ -1,0 +1,15 @@
+{
+  "verification_token": "fixture-token",
+  "message_id": "00000000-0000-4000-8000-000000000007",
+  "timestamp": "2024-01-14T03:56:47Z",
+  "type": "Donation",
+  "is_public": true,
+  "from_name": "Future Supporter",
+  "message": null,
+  "amount": "4.00",
+  "url": "https://ko-fi.example.invalid/transaction/0007",
+  "email": "future@example.invalid",
+  "currency": "USD",
+  "kofi_transaction_id": "00000000-0000-4000-8000-100000000007",
+  "future_payment_field": "preserved"
+}

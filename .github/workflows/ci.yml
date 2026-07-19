@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+      - run: uv sync --locked --all-extras
+      - run: uv run --locked pytest
+
+  minimum-dependencies:
+    name: Minimum supported dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          python-version: "3.10"
+          enable-cache: true
+      - run: uv lock --resolution lowest-direct
+      - run: uv sync --resolution lowest-direct --locked --all-extras
+      - run: uv run --resolution lowest-direct --locked pytest
+
+  wheel-smoke:
+    name: Wheel / ${{ matrix.extra }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        extra: [base, fastapi, flask, django]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          python-version: "3.12"
+          enable-cache: true
+      - run: uv build
+      - name: Verify distribution contents
+        if: matrix.extra == 'base'
+        run: uv run python tests/verify_distribution.py
+      - name: Install isolated wheel
+        shell: bash
+        run: |
+          wheel=$(find dist -name '*.whl' -print -quit)
+          uv venv .smoke --python 3.12
+          if [ "${{ matrix.extra }}" = "base" ]; then
+            uv pip install --python .smoke/bin/python "$wheel"
+          else
+            uv pip install --python .smoke/bin/python "mofi[${{ matrix.extra }}] @ file://$PWD/$wheel"
+          fi
+          .smoke/bin/python tests/packaging_smoke.py "${{ matrix.extra }}"

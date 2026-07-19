@@ -1,0 +1,13 @@
+{
+  "verification_token": "fixture-token",
+  "message_id": "00000000-0000-4000-8000-000000000008",
+  "timestamp": "2024-01-14T03:56:47Z",
+  "type": "Crowdfunding Reward",
+  "is_public": true,
+  "from_name": "Future Customer",
+  "amount": "15.00",
+  "currency": "USD",
+  "future_payment_field": {
+    "reward": "sample"
+  }
+}

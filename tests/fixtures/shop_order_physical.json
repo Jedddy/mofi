@@ -1,0 +1,33 @@
+{
+  "verification_token": "fixture-token",
+  "message_id": "00000000-0000-4000-8000-000000000004",
+  "timestamp": "2024-01-14T03:56:47Z",
+  "type": "Shop Order",
+  "is_public": true,
+  "from_name": "Sample Customer",
+  "message": null,
+  "amount": "27.95",
+  "url": "https://ko-fi.example.invalid/transaction/0004",
+  "email": "customer@example.invalid",
+  "currency": "USD",
+  "is_subscription_payment": false,
+  "is_first_subscription_payment": false,
+  "kofi_transaction_id": "00000000-0000-4000-8000-100000000004",
+  "shop_items": [
+    {
+      "direct_link_code": "sample-item",
+      "variation_name": "Blue",
+      "quantity": 1
+    }
+  ],
+  "tier_name": null,
+  "shipping": {
+    "full_name": "Sample Recipient",
+    "street_address": "100 Example Street",
+    "city": "Sample City",
+    "state_or_province": "Example State",
+    "postal_code": "00000",
+    "country": "United States",
+    "country_code": "US"
+  }
+}
