@@ -1,0 +1,21 @@
+{
+  "verification_token": "fixture-token",
+  "message_id": "00000000-0000-4000-8000-000000000005",
+  "timestamp": "2024-01-14T03:56:47Z",
+  "type": "Shop Order",
+  "is_public": true,
+  "from_name": "Digital Customer",
+  "message": null,
+  "amount": "8.00",
+  "url": "https://ko-fi.example.invalid/transaction/0005",
+  "email": "digital@example.invalid",
+  "currency": "USD",
+  "kofi_transaction_id": "00000000-0000-4000-8000-100000000005",
+  "shop_items": [
+    {
+      "direct_link_code": "digital-item",
+      "variation_name": null,
+      "quantity": 1
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "verification_token": "fixture-token",
+  "message_id": "00000000-0000-4000-8000-000000000003",
+  "timestamp": "2024-01-14T03:56:47Z",
+  "type": "Commission",
+  "is_public": true,
+  "from_name": "Sample Client",
+  "message": "Synthetic Commission fixture",
+  "amount": "25.00",
+  "url": "https://ko-fi.example.invalid/transaction/0003",
+  "email": "client@example.invalid",
+  "currency": "USD",
+  "kofi_transaction_id": "00000000-0000-4000-8000-100000000003"
+}

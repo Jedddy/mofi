@@ -1,0 +1,11 @@
+{
+  "verification_token": "incorrect-fixture-token",
+  "message_id": "00000000-0000-4000-8000-000000000010",
+  "timestamp": "2024-01-14T03:56:47Z",
+  "type": "Donation",
+  "is_public": true,
+  "from_name": "Invalid Supporter",
+  "amount": "3.00",
+  "currency": "USD",
+  "kofi_transaction_id": "00000000-0000-4000-8000-100000000010"
+}

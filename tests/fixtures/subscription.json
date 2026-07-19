@@ -1,0 +1,19 @@
+{
+  "verification_token": "fixture-token",
+  "message_id": "00000000-0000-4000-8000-000000000002",
+  "timestamp": "2024-01-14T03:56:47Z",
+  "type": "Subscription",
+  "is_public": true,
+  "from_name": "Sample Member",
+  "message": null,
+  "amount": "5.00",
+  "url": "https://ko-fi.example.invalid/transaction/0002",
+  "email": "member@example.invalid",
+  "currency": "USD",
+  "is_subscription_payment": true,
+  "is_first_subscription_payment": false,
+  "kofi_transaction_id": "00000000-0000-4000-8000-100000000002",
+  "shop_items": null,
+  "tier_name": "Bronze",
+  "shipping": null
+}

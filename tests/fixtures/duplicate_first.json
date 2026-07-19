@@ -1,0 +1,11 @@
+{
+  "verification_token": "fixture-token",
+  "message_id": "00000000-0000-4000-8000-000000000009",
+  "timestamp": "2024-01-14T03:56:47Z",
+  "type": "Donation",
+  "is_public": true,
+  "from_name": "Retry Supporter",
+  "amount": "2.00",
+  "currency": "USD",
+  "kofi_transaction_id": "00000000-0000-4000-8000-100000000009"
+}
