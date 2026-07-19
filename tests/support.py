@@ -12,9 +12,12 @@ FIXTURES = Path(__file__).parent / "fixtures"
 FIXTURE_TOKEN = "fixture-token"
 PAYMENT_CASES: tuple[tuple[str, type[PaymentEvent]], ...] = (
     ("donation.json", Donation),
+    ("donation_private.json", Donation),
+    ("donation_extra_field.json", Donation),
     ("subscription.json", Subscription),
     ("commission.synthetic.json", Commission),
     ("shop_order_physical.json", ShopOrder),
+    ("shop_order_digital.json", ShopOrder),
     ("unknown_payment.json", UnknownPayment),
 )
 
