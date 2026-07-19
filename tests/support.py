@@ -5,8 +5,18 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from mofi import Commission, Donation, PaymentEvent, ShopOrder, Subscription, UnknownPayment
+
 
 FIXTURES = Path(__file__).parent / "fixtures"
+FIXTURE_TOKEN = "fixture-token"
+PAYMENT_CASES: tuple[tuple[str, type[PaymentEvent]], ...] = (
+    ("donation.json", Donation),
+    ("subscription.json", Subscription),
+    ("commission.synthetic.json", Commission),
+    ("shop_order_physical.json", ShopOrder),
+    ("unknown_payment.json", UnknownPayment),
+)
 
 
 def load_payload(name: str) -> dict[str, object]:

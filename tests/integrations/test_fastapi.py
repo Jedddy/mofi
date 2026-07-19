@@ -9,12 +9,12 @@ import httpx
 import pytest
 from fastapi import FastAPI
 
-from mofi import Commission, Donation, PaymentEvent, ShopOrder, Subscription, UnknownPayment
+from mofi import Donation, PaymentEvent, Subscription
 from mofi.integrations.fastapi import KoFiRouter
-from tests.support import encoded_payload, load_payload
+from tests.support import FIXTURE_TOKEN, PAYMENT_CASES, encoded_payload, load_payload
 
 
-TOKEN = "fixture-token"
+TOKEN = FIXTURE_TOKEN
 
 
 async def post(app: FastAPI, path: str, data: str) -> httpx.Response:
@@ -26,13 +26,7 @@ async def post(app: FastAPI, path: str, data: str) -> httpx.Response:
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("fixture_name", "event_class"),
-    [
-        ("donation.json", Donation),
-        ("subscription.json", Subscription),
-        ("commission.synthetic.json", Commission),
-        ("shop_order_physical.json", ShopOrder),
-        ("unknown_payment.json", UnknownPayment),
-    ],
+    PAYMENT_CASES,
 )
 async def test_known_and_unknown_payments_reach_all_payment_handlers(
     fixture_name: str,

@@ -31,7 +31,7 @@ _KNOWN_EVENT_TYPES = frozenset(_EVENT_TYPES.values())
 
 EventT = TypeVar("EventT", bound=PaymentEvent)
 Handler = Callable[[EventT], Any]
-StoredHandler = Callable[[PaymentEvent], Any]
+StoredHandler = Callable[..., Any]
 
 
 def parse_webhook(data: str, verification_token: str) -> PaymentEvent:
@@ -65,10 +65,8 @@ def parse_webhook(data: str, verification_token: str) -> PaymentEvent:
         raise VerificationFailed()
 
     model = _EVENT_TYPES.get(_normalize_type(event_type), UnknownPayment)
-    decoded = deepcopy(payload)
-
     try:
-        return model.model_validate({**decoded, "raw": deepcopy(decoded)})
+        return model.model_validate({**payload, "raw": deepcopy(payload)})
     except ValidationError:
         raise InvalidEvent() from None
 
@@ -89,7 +87,7 @@ class HandlerRegistry:
 
         if event_type not in _KNOWN_EVENT_TYPES:
             raise ValueError("Specific handlers require a known payment event class.")
-        self._specific[event_type].append(handler)  # type: ignore[arg-type]
+        self._specific[event_type].append(handler)
         return handler
 
     def add_all(self, handler: Handler[PaymentEvent]) -> Handler[PaymentEvent]:

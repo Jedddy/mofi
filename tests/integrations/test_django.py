@@ -18,13 +18,13 @@ from django.http import HttpRequest, HttpResponse
 from django.test import Client, override_settings
 from django.urls import clear_url_caches, path, reverse
 
-from mofi import Commission, Donation, PaymentEvent, ShopOrder, Subscription, UnknownPayment
+from mofi import Donation, PaymentEvent, Subscription
 from mofi.integrations.django import KoFiWebhook
 from tests import django_urls
-from tests.support import encoded_payload, load_payload
+from tests.support import FIXTURE_TOKEN, PAYMENT_CASES, encoded_payload, load_payload
 
 
-TOKEN = "fixture-token"
+TOKEN = FIXTURE_TOKEN
 
 
 @pytest.fixture
@@ -42,13 +42,7 @@ def install_urls() -> Iterator[Callable[..., None]]:
 
 @pytest.mark.parametrize(
     ("fixture_name", "event_class"),
-    [
-        ("donation.json", Donation),
-        ("subscription.json", Subscription),
-        ("commission.synthetic.json", Commission),
-        ("shop_order_physical.json", ShopOrder),
-        ("unknown_payment.json", UnknownPayment),
-    ],
+    PAYMENT_CASES,
 )
 def test_known_and_unknown_payments_reach_all_payment_handlers(
     install_urls: Callable[..., None],

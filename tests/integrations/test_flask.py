@@ -8,12 +8,12 @@ from urllib.parse import urlencode
 import pytest
 from flask import Flask
 
-from mofi import Commission, Donation, PaymentEvent, ShopOrder, Subscription, UnknownPayment
+from mofi import Donation, PaymentEvent, Subscription
 from mofi.integrations.flask import KoFiBlueprint
-from tests.support import encoded_payload, load_payload
+from tests.support import FIXTURE_TOKEN, PAYMENT_CASES, encoded_payload, load_payload
 
 
-TOKEN = "fixture-token"
+TOKEN = FIXTURE_TOKEN
 
 
 def create_app(webhook: KoFiBlueprint) -> Flask:
@@ -25,13 +25,7 @@ def create_app(webhook: KoFiBlueprint) -> Flask:
 
 @pytest.mark.parametrize(
     ("fixture_name", "event_class"),
-    [
-        ("donation.json", Donation),
-        ("subscription.json", Subscription),
-        ("commission.synthetic.json", Commission),
-        ("shop_order_physical.json", ShopOrder),
-        ("unknown_payment.json", UnknownPayment),
-    ],
+    PAYMENT_CASES,
 )
 def test_known_and_unknown_payments_reach_all_payment_handlers(
     fixture_name: str,
