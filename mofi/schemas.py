@@ -1,163 +1,106 @@
+"""Framework-independent models for Ko-fi payment webhooks."""
+
+from __future__ import annotations
+
 from datetime import datetime
-from typing import Literal, Union
+from typing import Any
 
-from pydantic import BaseModel
-
-
-class _Base(BaseModel):
-    verification_token: str
-    message_id: str
-    timestamp: datetime
-    is_public: bool
-    from_name: str
-    amount: str
-    url: str
-    email: str
-    currency: str
-    kofi_transaction_id: str
+from pydantic import BaseModel, ConfigDict, Field
 
 
-class ShopItem(BaseModel):
-    """Represents a shop item.
+class _PayloadModel(BaseModel):
+    """Base model that keeps fields added by Ko-fi in future payloads."""
 
-    Attributes:
-        direct_link_code (str): The direct link code of the item.
-        variation_name (str): The name of the variation.
-        quantity (int): The quantity of the item.
+    model_config = ConfigDict(extra="allow")
+
+
+class ShopItem(_PayloadModel):
+    """One item included in a Ko-fi Shop Order."""
+
+    direct_link_code: str | None = None
+    variation_name: str | None = None
+    quantity: int | None = None
+
+
+class Shipping(_PayloadModel):
+    """Optional physical-delivery details for a Ko-fi Shop Order."""
+
+    full_name: str | None = None
+    street_address: str | None = None
+    city: str | None = None
+    state_or_province: str | None = None
+    postal_code: str | None = None
+    country: str | None = None
+    country_code: str | None = None
+    telephone: str | None = None
+
+
+class PaymentEvent(_PayloadModel):
+    """Fields shared by every Ko-fi payment notification.
+
+    Ko-fi may add fields without versioning its webhook payload. Every event
+    therefore retains the complete decoded mapping in :attr:`raw` and allows
+    added fields to remain accessible on the model.
     """
 
-    direct_link_code: str
-    variation_name: str
-    quantity: int
+    verification_token: str = Field(min_length=1, repr=False)
+    message_id: str = Field(min_length=1)
+    type: str = Field(min_length=1)
+    raw: dict[str, Any] = Field(repr=False)
+    timestamp: datetime | None = None
+    is_public: bool | None = None
+    from_name: str | None = None
+    message: str | None = None
+    amount: str | None = None
+    url: str | None = None
+    email: str | None = None
+    currency: str | None = None
+    kofi_transaction_id: str | None = None
 
 
-class Shipping(BaseModel):
-    """Represents shipping information.
+class Donation(PaymentEvent):
+    """A one-time Ko-fi donation or tip."""
 
-    Attributes:
-        full_name (str): The full name of the recipient.
-        street_address (str): The street address of the recipient.
-        city (str): The city of the recipient.
-        state_or_province (str): The state or province of the recipient.
-        postal_code (str): The postal code of the recipient.
-        country (str): The country of the recipient.
-        country_code (str): The country code of the recipient.
-        telephone (str): The telephone number of the recipient.
+
+class Subscription(PaymentEvent):
+    """A Ko-fi membership or recurring-support payment."""
+
+    is_subscription_payment: bool | None = None
+    is_first_subscription_payment: bool | None = None
+    tier_name: str | None = None
+
+
+class Commission(PaymentEvent):
+    """A Ko-fi Commission payment.
+
+    Only confirmed common payment fields are modeled. Commission-specific
+    values remain available through :attr:`PaymentEvent.raw` until an
+    authenticated Ko-fi delivery provides evidence for additional fields.
     """
 
-    full_name: str
-    street_address: str
-    city: str
-    state_or_province: str
-    postal_code: str
-    country: str
-    country_code: str
-    telephone: str
+
+class ShopOrder(PaymentEvent):
+    """A digital or physical Ko-fi Shop Order."""
+
+    shop_items: list[ShopItem] | None = None
+    shipping: Shipping | None = None
 
 
-class GlobalType(_Base):
-    """Represents a global type.
-
-    Attributes:
-        verification_token (str): The verification token.
-        message_id (str): The message ID.
-        timestamp (datetime): The timestamp.
-        type (str): The type.
-        is_public (bool): Whether the donation is public.
-        from_name (str): The name of the donor.
-        message (str): The message of the donor.
-        amount (str): The amount of the donation.
-        url (str): The URL of the donation.
-        email (str): The email of the donor.
-        currency (str): The currency of the donation.
-        is_subscription_payment (bool): Whether the donation is a subscription payment.
-        is_first_subscription_payment (bool): Whether the donation is
-            the first subscription payment.
-        kofi_transaction_id (str): The transaction ID of the donation.
-        shop_items (list[ShopItem]): The shop items of the donation.
-        tier_name (str): The name of the tier.
-        shipping (Shipping): The shipping information.
-    """
-
-    type: str
-    message: Union[str, None] = None
-    is_subscription_payment: bool
-    is_first_subscription_payment: bool
-    shop_items: Union[list[ShopItem], None] = None
-    tier_name: Union[str, None] = None
-    shipping: Union[Shipping, None] = None
+class UnknownPayment(PaymentEvent):
+    """A valid payment type that this Mofi version does not know yet."""
 
 
-class Donation(_Base):
-    """Represents a donation.
-
-    Attributes:
-        verification_token (str): The verification token.
-        message_id (str): The message ID.
-        timestamp (datetime): The timestamp.
-        type (str): The type.
-        is_public (bool): Whether the donation is public.
-        from_name (str): The name of the donor.
-        message (str): The message of the donor.
-        amount (str): The amount of the donation.
-        url (str): The URL of the donation.
-        email (str): The email of the donor.
-        currency (str): The currency of the donation.
-        kofi_transaction_id (str): The transaction ID of the donation.
-    """
-
-    type: Literal["Donation"]
-    message: str
+KnownPayment = Donation | Subscription | Commission | ShopOrder
 
 
-class Subscription(_Base):
-    """Represents a subscription.
-
-    Attributes:
-        verification_token (str): The verification token.
-        message_id (str): The message ID.
-        timestamp (datetime): The timestamp.
-        type (str): The type.
-        is_public (bool): Whether the donation is public.
-        from_name (str): The name of the donor.
-        message (str): The message of the donor.
-        amount (str): The amount of the donation.
-        url (str): The URL of the donation.
-        email (str): The email of the donor.
-        currency (str): The currency of the donation.
-        is_subscription_payment (bool): Whether the donation is a subscription payment.
-        is_first_subscription_payment (bool): Whether the donation is
-            the first subscription payment.
-        kofi_transaction_id (str): The transaction ID of the donation.
-        tier_name (str): The name of the tier.
-    """
-
-    type: Literal["Subscription"]
-    message: Union[str, None] = None
-    is_subscription_payment: bool
-    is_first_subscription_payment: bool
-    tier_name: Union[str, None] = None
-
-
-class ShopOrder(_Base):
-    """Represents a shop order.
-
-    Attributes:
-        verification_token (str): The verification token.
-        message_id (str): The message ID.
-        timestamp (datetime): The timestamp.
-        type (str): The type.
-        is_public (bool): Whether the donation is public.
-        from_name (str): The name of the donor.
-        amount (str): The amount of the donation.
-        url (str): The URL of the donation.
-        email (str): The email of the donor.
-        currency (str): The currency of the donation.
-        kofi_transaction_id (str): The transaction ID of the donation.
-        shop_items (list[ShopItem]): The shop items of the donation.
-        shipping (Shipping): The shipping information.
-    """
-
-    type: Literal["Shop Order"]
-    shop_items: list[ShopItem]
-    shipping: Shipping
+__all__ = [
+    "Commission",
+    "Donation",
+    "KnownPayment",
+    "PaymentEvent",
+    "Shipping",
+    "ShopItem",
+    "ShopOrder",
+    "Subscription",
+    "UnknownPayment",
+]
